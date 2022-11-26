@@ -88,47 +88,49 @@ const SidebarContent = (props) => {
   const pollDisplay = sidebarContentPanel === PANELS.POLL ? 'inherit' : 'none';
 
   return (
-    <Resizable
-      minWidth={minWidth}
-      maxWidth={maxWidth}
-      minHeight={minHeight}
-      maxHeight={maxHeight}
-      size={{
-        width,
-        height,
-      }}
-      enable={{
-        top: isResizable && resizableEdge.top,
-        left: isResizable && resizableEdge.left,
-        bottom: isResizable && resizableEdge.bottom,
-        right: isResizable && resizableEdge.right,
-      }}
-      handleWrapperClass="resizeSidebarContentWrapper"
-      onResizeStart={() => {
-        setIsResizing(true);
-        setResizeStartWidth(resizableWidth);
-        setResizeStartHeight(resizableHeight);
-      }}
-      onResize={(...[, , , delta]) => setSidebarContentSize(delta.width, delta.height)}
-      onResizeStop={() => {
-        setIsResizing(false);
-        setResizeStartWidth(0);
-        setResizeStartHeight(0);
-      }}
-      style={{
-        position: 'absolute',
-        top,
-        left,
-        right,
-        zIndex,
-        width,
-        height,
-      }}
-      handleStyles={{
-        left: { height: '100vh' },
-        right: { height: '100vh' },
-      }}
-    >
+    <>
+    {/* // <Resizable
+    //   minWidth={minWidth}
+    //   maxWidth={maxWidth}
+    //   minHeight={minHeight}
+    //   maxHeight={maxHeight}
+    //   size={{
+    //     width,
+    //     height,
+    //   }}
+    //   enable={{
+    //     top: isResizable && resizableEdge.top,
+    //     left: isResizable && resizableEdge.left,
+    //     bottom: isResizable && resizableEdge.bottom,
+    //     right: isResizable && resizableEdge.right,
+    //   }}
+    //   handleWrapperClass="resizeSidebarContentWrapper"
+    //   onResizeStart={() => {
+    //     setIsResizing(true);
+    //     setResizeStartWidth(resizableWidth);
+    //     setResizeStartHeight(resizableHeight);
+    //   }}
+    //   onResize={(...[, , , delta]) => setSidebarContentSize(delta.width, delta.height)}
+    //   onResizeStop={() => {
+    //     setIsResizing(false);
+    //     setResizeStartWidth(0);
+    //     setResizeStartHeight(0);
+    //   }}
+    //   style={{
+    //     position: 'absolute',
+    //     top,
+    //     left,
+    //     right,
+    //     zIndex,
+    //     width,
+    //     height,
+    //   }}
+    //   handleStyles={{
+    //     left: { height: '100vh' },
+    //     right: { height: '100vh' },
+    //   }}     
+    // > */}
+    <div style={{height: "100%" }}>
       {sidebarContentPanel === PANELS.CHAT
       && (
       <ErrorBoundary
@@ -144,7 +146,11 @@ const SidebarContent = (props) => {
       <Styled.Poll style={{ minWidth, top: '0', display: pollDisplay }} id="pollPanel">
         <PollContainer smallSidebar={smallSidebar} amIPresenter={amIPresenter} />
       </Styled.Poll>
-    </Resizable>
+    {/* </Resizable> */}
+
+    </div>
+
+    </>
   );
 };
 

@@ -48,14 +48,15 @@ import GlobalStyles from '/imports/ui/stylesheets/styled-components/globalStyles
 import ActionsBarContainer from '../actions-bar/container';
 import PushLayoutEngine from '../layout/push-layout/pushLayoutEngine';
 import NotesContainer from '/imports/ui/components/notes/container';
-import 'react-grid-layout/css/styles.css'; 
-import 'react-resizable/css/styles.css';
+import { Responsive, WidthProvider } from "react-grid-layout";
+import 'react-grid-layout/css/styles.css';
 
 const MOBILE_MEDIA = 'only screen and (max-width: 40em)';
 const APP_CONFIG = Meteor.settings.public.app;
 const DESKTOP_FONT_SIZE = APP_CONFIG.desktopFontSize;
 const MOBILE_FONT_SIZE = APP_CONFIG.mobileFontSize;
 const LAYOUT_CONFIG = Meteor.settings.public.layout;
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const intlMessages = defineMessages({
   userListLabel: {
@@ -358,12 +359,12 @@ class App extends Component {
         aria-hidden={this.shouldAriaHide()}
         style={
           {
-            position: 'absolute',
-            top: actionsBarStyle.top,
-            left: actionsBarStyle.left,
-            height: actionsBarStyle.height,
-            width: actionsBarStyle.width,
-            padding: actionsBarStyle.padding,
+            // position: 'absolute',
+            // top: actionsBarStyle.top,
+            // left: actionsBarStyle.left,
+            // height: actionsBarStyle.height,
+            // width: actionsBarStyle.width,
+            // padding: actionsBarStyle.padding,
           }
         }
       >
@@ -488,8 +489,117 @@ class App extends Component {
       presentationIsOpen,
     } = this.props;
 
+    const gridRowHeight = 100;
+
+    const layout = [
+      { i: "navBar", x: 12, y: 0, w: 8, h: 0.8, minH: 0.8, minW: 2.5 },
+      { i: "sideBarNav", x: 0, y: 0, w: 2, h: window.innerHeight/gridRowHeight, minH: 1 },
+      { i: "sideBarCont", x: 2, y: 0, w: 2, h: window.innerHeight/gridRowHeight, minH: 1 },
+      { i: "static1", x: 0, y: 0, w: 1, h: 1, static: true },
+      { i: "pres", x: 4, y: 4, w: 8, h: 8 },
+      { i: "static2", x: 0, y: 0, w: 1, h: 1, static: true },
+      { i: "actionBar", x: 12, y: 6, w: 8, h: 0.5, minW: 2.5 },
+    ];
+
     return (
       <>
+        <Notifications />
+        {this.mountPushLayoutEngine()}
+        {selectedLayout ? <LayoutEngine layoutType={selectedLayout} /> : null}
+        <GlobalStyles />
+        <Styled.Layout
+          id="layout"
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        >
+
+          {this.renderActivityCheck()}
+          {this.renderUserInformation()}
+          <ScreenReaderAlertContainer />
+          <BannerBarContainer />
+          <NotificationsBarContainer />
+
+          <ResponsiveGridLayout
+            className="layout"
+            layouts={{ lg: layout}}
+            // breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+            // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+            breakpoints={{ lg: 1200 }}
+            cols={{ lg: 12 }}        
+            rowHeight={gridRowHeight}
+            isResizable={true}
+            autoSize={true}
+            margin= {[0, 0]}    
+            width="100vw"    
+            height="100vh"
+            overflow="auto"
+          >
+
+            <div key="sideBarNav">
+              <SidebarNavigationContainer />
+            </div>
+            <div key="sideBarCont" >
+              <SidebarContentContainer />
+            </div>
+            <div key="navBar" >
+              <NavBarContainer main="new" />
+            </div>
+            <div key="static1">
+              <NewWebcamContainer isLayoutSwapped={!presentationIsOpen} />
+            </div>
+            <div key="pres">
+              {shouldShowPresentation ? <PresentationAreaContainer presentationIsOpen={presentationIsOpen} /> : null}
+              {shouldShowScreenshare ? <ScreenshareContainer isLayoutSwapped={!presentationIsOpen} /> : null}
+              {
+                shouldShowExternalVideo
+                  ? <ExternalVideoContainer isLayoutSwapped={!presentationIsOpen} isPresenter={isPresenter} />
+                  : null
+              }
+            </div>
+            <div key="static2">
+              {shouldShowSharedNotes ? <NotesContainer area="media" layoutType={selectedLayout} /> : null}
+              {this.renderCaptions()}
+              <AudioCaptionsSpeechContainer />
+              {this.renderAudioCaptions()}
+              <UploaderContainer />
+              <CaptionsSpeechContainer />
+              <BreakoutRoomInvitation />
+              <AudioContainer />
+              <ToastContainer rtl />
+              {(audioAlertEnabled || pushAlertEnabled)
+                && (
+                  <ChatAlertContainer
+                    audioAlertEnabled={audioAlertEnabled}
+                    pushAlertEnabled={pushAlertEnabled}
+                  />
+                )}
+              <StatusNotifier status="raiseHand" />
+              <ManyWebcamsNotifier />
+              <PollingContainer />
+              <ModalContainer />
+              <PadsSessionsContainer />
+            </div>
+            <div key="actionBar">
+              {this.renderActionsBar()} 
+            </div>
+
+          </ResponsiveGridLayout>
+
+          {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
+          {customStyle ? <link rel="stylesheet" type="text/css" href={`data:text/css;charset=UTF-8,${encodeURIComponent(customStyle)}`} /> : null}
+        </Styled.Layout>
+
+
+
+
+
+
+
+
+        {/* 
+        
         <Notifications />
         {this.mountPushLayoutEngine()}
         {selectedLayout ? <LayoutEngine layoutType={selectedLayout} /> : null}
@@ -506,11 +616,11 @@ class App extends Component {
           <ScreenReaderAlertContainer />
           <BannerBarContainer />
           <NotificationsBarContainer />
-          <SidebarNavigationContainer />
-          <SidebarContentContainer />
-          <NavBarContainer main="new" />
-          <NewWebcamContainer isLayoutSwapped={!presentationIsOpen} />
-          {shouldShowPresentation ? <PresentationAreaContainer presentationIsOpen={presentationIsOpen} /> : null}
+          <SidebarNavigationContainer />   */}
+          {/* <SidebarContentContainer /> */}
+          {/* <NavBarContainer main="new" />  */}
+          {/* <NewWebcamContainer isLayoutSwapped={!presentationIsOpen} /> */}
+          {/* {shouldShowPresentation ? <PresentationAreaContainer presentationIsOpen={presentationIsOpen} /> : null}
           {shouldShowScreenshare ? <ScreenshareContainer isLayoutSwapped={!presentationIsOpen} /> : null}
           {
             shouldShowExternalVideo
@@ -537,11 +647,11 @@ class App extends Component {
           <ManyWebcamsNotifier />
           <PollingContainer />
           <ModalContainer />
-          <PadsSessionsContainer />
-          {this.renderActionsBar()}
-          {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
+          <PadsSessionsContainer /> */}
+          {/* {this.renderActionsBar()}  */}
+          {/* {customStyleUrl ? <link rel="stylesheet" type="text/css" href={customStyleUrl} /> : null}
           {customStyle ? <link rel="stylesheet" type="text/css" href={`data:text/css;charset=UTF-8,${encodeURIComponent(customStyle)}`} /> : null}
-        </Styled.Layout>
+        </Styled.Layout> */}
       </>
     );
   }

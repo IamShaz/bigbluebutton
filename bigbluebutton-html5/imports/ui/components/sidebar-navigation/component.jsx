@@ -16,6 +16,7 @@ const propTypes = {
   isResizable: PropTypes.bool.isRequired,
   resizableEdge: PropTypes.objectOf(PropTypes.bool).isRequired,
   contextDispatch: PropTypes.func.isRequired,
+  // key: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -36,6 +37,7 @@ const SidebarNavigation = (props) => {
     isResizable,
     resizableEdge,
     contextDispatch,
+    // key,
   } = props;
 
   const [resizableWidth, setResizableWidth] = useState(width);
@@ -65,46 +67,48 @@ const SidebarNavigation = (props) => {
   };
 
   return (
-    <Resizable
-      minWidth={minWidth}
-      maxWidth={maxWidth}
-      size={{
-        width,
-        height,
-      }}
-      enable={{
-        top: isResizable && resizableEdge.top,
-        left: isResizable && resizableEdge.left,
-        bottom: isResizable && resizableEdge.bottom,
-        right: isResizable && resizableEdge.right,
-      }}
-      handleStyles={{
-        right: {
-          right: '-8px',
-        },
-      }}
-      handleWrapperClass="resizeSidebarNavWrapper"
-      onResizeStart={() => {
-        setIsResizing(true);
-        setResizeStartWidth(resizableWidth);
-      }}
-      onResize={(...[, , , delta]) => setSidebarNavWidth(delta.width)}
-      onResizeStop={() => {
-        setIsResizing(false);
-        setResizeStartWidth(0);
-      }}
-      style={{
-        position: 'absolute',
-        top,
-        left,
-        right,
-        zIndex,
-        width,
-        height,
-      }}
-    >
-      <UserListContainer />
-    </Resizable>
+    // <Resizable
+    //   minWidth={minWidth}
+    //   maxWidth={maxWidth}
+    //   size={{
+    //     width,
+    //     height,
+    //   }}
+    //   enable={{
+    //     top: isResizable && resizableEdge.top,
+    //     left: isResizable && resizableEdge.left,
+    //     bottom: isResizable && resizableEdge.bottom,
+    //     right: isResizable && resizableEdge.right,
+    //   }}
+    //   handleStyles={{
+    //     right: {
+    //       right: '-8px',
+    //     },
+    //   }}
+    //   handleWrapperClass="resizeSidebarNavWrapper"
+    //   onResizeStart={() => {
+    //     setIsResizing(true);
+    //     setResizeStartWidth(resizableWidth);
+    //   }}
+    //   onResize={(...[, , , delta]) => setSidebarNavWidth(delta.width)}
+    //   onResizeStop={() => {
+    //     setIsResizing(false);
+    //     setResizeStartWidth(0);
+    //   }}
+    //   style={{
+    //     position: 'absolute',
+    //     top,
+    //     left,
+    //     right,
+    //     zIndex,
+    //     width,
+    //     height,
+    //   }}
+    // >
+    <div style={{height: "100%" }}>
+      <UserListContainer  />
+     </div>
+    // </Resizable>
   );
 };
 
